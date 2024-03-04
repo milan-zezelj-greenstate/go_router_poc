@@ -18,14 +18,14 @@ class _BScreenState extends State<BScreen> {
             Text('Screen B'),
             ElevatedButton(
               onPressed: () {
-                context.push('/b');
                 context.push('/b/details');
               },
-              child: Text("Next Screen"),
+              child: Text("Details"),
             ),
             ElevatedButton(
               onPressed: () {
-                context.pop();
+                // context.pop();
+                Navigator.of(context).pop();
               },
               child: Text("Go back"),
             ),

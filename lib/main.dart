@@ -4,6 +4,7 @@ import 'package:go_router_poc/presentation/screens/a_screen.dart';
 import 'package:go_router_poc/presentation/screens/b_screen.dart';
 import 'package:go_router_poc/presentation/screens/details_screen.dart';
 import 'package:go_router_poc/presentation/screens/home_screen.dart';
+import 'package:go_router_poc/presentation/screens/sign_in_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -17,10 +18,30 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
 
+final isSignedIn = true;
+
 final GoRouter _router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/a/details/b',
+  initialLocation: '/a',
+  redirect: (context, state) {
+    if (!isSignedIn) {
+      return "/login";
+    } else {
+      return null;
+    }
+  },
   routes: [
+    ShellRoute(
+      builder: (context, state, child) {
+        return Scaffold(body: child);
+      },
+      routes: [
+        GoRoute(
+          path: "/login",
+          builder: (context, state) => SignInScreen(label: "Sign in"),
+        ),
+      ],
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
@@ -30,15 +51,16 @@ final GoRouter _router = GoRouter(
               actions: [
                 TextButton(
                     onPressed: () {
-                      // context.push('/a/details/b');
                       context.go('/a/details/b');
+
+                      // context.push('/a/details/b');
                     },
-                    child: const Text("A")),
+                    child: const Text("Go")),
                 TextButton(
                     onPressed: () {
-                      context.go('/b');
+                      context.push('/a/details/b');
                     },
-                    child: const Text("B"))
+                    child: const Text("Push"))
               ],
             ),
             body: child);
